@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="/css/style.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
+		<script src="/js/helpers.js"></script>
+	</head>
+	<body onload="hideNavigationButtons()">
+		<h1 id="title">Dynamic system simulator</h1>
+		<form>
+			<textarea class="center" id="textArea" rows="10" cols="45" placeholder="Write equations here..."></textarea>
+			<input type="file" class="center" id="files" name="files" multiple>
+			<input type="text" class="center" id="start" name="start" placeholder="Start"><br>
+			<input type="text" class="center" id="end" name="end" placeholder="End"><br>
+			<input type="text" class="center" id="step" name="step" placeholder="Step"><br>
+		</form>
+		<button class="center" onclick="processInput()">Calculate</button>
+		<canvas id="myChart"></canvas>
+		<div id="outerDiv">
+			<div id="buttonHolder">
+				<button id="previousButton" onclick="previousGraph()">Previous</button>
+				<button id="nextButton" onclick="nextGraph()">Next</button>
+			</div>
+		</div>
+	</body>
+</html>
