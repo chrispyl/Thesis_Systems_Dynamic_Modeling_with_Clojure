@@ -1,5 +1,7 @@
 #### This project contains the methods presented in Thesis: Systems Dynamic Modeling with Clojure, as well as the web application developed 
 <br>
+<br>
+##### Parallel methods, serial methods, test systems:
 * *Parallelism in time*
     * [method 1](/Parallelism in time/method_1.clj)
     * [method 2](/Parallelism in time/method_2.clj)
@@ -20,8 +22,8 @@
     * [for parallelism across the system](/Serial methods/serial_method_for_parallelism_across_the_system.clj)
 * *Test systems*
     * [for parallelism in time](/Test systems/for_parallelism_in_time.clj)
-    * [for parallelism across the system](/Test systems/for_parallelism_across_the_system.clj) 
-<br> 
-<br> 
+    * [for parallelism across the system](/Test systems/for_parallelism_across_the_system.clj)
 
-[Web application](/infixapp/)
+<br>
+###### Web application:
+To run the [web application](/infixapp/), head to the 'infixapp' folder in the command line and type 'lein uberjar'. Two executables will be created inside the 'target' folder.
