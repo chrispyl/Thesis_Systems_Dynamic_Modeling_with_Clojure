@@ -16,8 +16,8 @@
     * [method 3](/Parallelism across the system/method_3.clj)
     * [method 3 variation 1](/Parallelism across the system/method_3_variation_1.clj) 
 *  *Serial methods*
-    * [for parallelism in time](/Serial methods/serial_method_for_parallelism_across_the_system.clj)
-    * [for parallelism across the system](/Serial methods/serial_method_for_parallelism_in time.clj)
+    * [for parallelism in time](/Serial methods/serial_method_for_parallelism_in_time)
+    * [for parallelism across the system](/Serial methods/serial_method_for_parallelism_across_the_system.clj)
 * *Test systems*
     * [for parallelism in time](/Test systems/for_parallelism_in_time.clj)
     * [for parallelism across the system](/Test systems/for_parallelism_across_the_system.clj) 
