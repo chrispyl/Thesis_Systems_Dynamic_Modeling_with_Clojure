@@ -38,8 +38,9 @@
 		  result (cond 
 					(empty? (:independent subsystems-map)) (serial-integration start end step system-map fileValues)
 					(and (empty? (:dependent subsystems-map)) (= (count (:independent subsystems-map)) 1)) (serial-integration start end step system-map fileValues)
-					:else (partition-labour start end step subsystems-map system-map fileValues))]
-		(create-result-map (keys result) (vals result))
+					:else (partition-labour start end step subsystems-map system-map fileValues))
+		 result-map (create-result-map (keys result) (vals result))]
+		(hash-map :results result-map :all-teams team-map)
 		))	
 	
 (defn process-req [req]
@@ -49,6 +50,7 @@
 		  iterations (quot (- (m "end" ) (m "start")) (m "step"))
 		  fileValues (zipmap (take (inc iterations) (keys fileValues)) (map #(vec (take (inc iterations) %)) (vals fileValues))) ;keep only the values that will be used in the integration + the initial values, we use vec because later we want it to be homogenous with others
 		  result (process (m "start") (m "end" ) (m "step") (m "strings") fileValues)]
+		;(println (generate-string result))  
 		(generate-string result))) ;cheshire function to create json from clojure data structures			
 
 ;Defines a Ring handler function from a sequence of routes

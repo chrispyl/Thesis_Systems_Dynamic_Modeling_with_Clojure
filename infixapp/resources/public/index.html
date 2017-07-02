@@ -17,7 +17,13 @@
 			<input type="text" class="center" id="step" name="step" placeholder="Step"><br>
 		</form>
 		<button class="center" onclick="processInput()">Calculate</button>
-		<canvas id="myChart"></canvas>
+		<div id="resultsDiv">
+			<div id="anotherDiv">
+				<textarea id="teamText" rows="18" cols="25"></textarea>
+				<canvas id="myChart"></canvas>
+				<textarea id="teamTextHidden" rows="18" cols="25"></textarea>
+			</div>
+		</div>
 		<div id="outerDiv">
 			<div id="buttonHolder">
 				<button id="previousButton" onclick="previousGraph()">Previous</button>

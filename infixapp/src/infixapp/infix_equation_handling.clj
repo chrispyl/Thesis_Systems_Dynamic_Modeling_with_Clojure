@@ -1,7 +1,7 @@
 (in-ns 'infixapp.core)			  
 
 (defn is-operator? [s]
-	(if (empty? (filter #(= s %) ["=" "+" "-" "*" "/" "abs" "signum" "**" "exp" "log" "e" "ð" "sqrt" "fact" "sin" "cos" "tan" "asin" "acos" "atan" "sinh" "cosh" "tanh" "min" "max" "ln"])) 
+	(if (empty? (filter #(= s %) ["=" "+" "-" "*" "/" "abs" "signum" "**" "exp" "log" "e" "ð" "sqrt" "fact" "sin" "cos" "tan" "asin" "acos" "atan" "sinh" "cosh" "tanh" "min" "max" "ln" "floor"])) 
 		false true))
 
 (defn is-number? [s]
@@ -42,7 +42,7 @@
 
 (defn create-function [expr]
   (if-let [f (parse-all expression expr)]
-	(let [extended-env (merge base-env {:min (fn [x y] (if (< x y) x y)) :max (fn [x y] (if (> x y) x y)) :ln (fn [x] (Math/log x))})]
+	(let [extended-env (merge base-env {:min (fn [x y] (if (< x y) x y)) :max (fn [x y] (if (> x y) x y)) :ln (fn [x] (Math/log x)) :floor (fn [x] (long (Math/floor x)))})]
 		(fn [params]
 		  (f (merge extended-env params))))))										 
 	  	  
@@ -69,7 +69,7 @@
 			s)))	 			
 
 (defn substitute [strings names]
-	(let [infix-equations ["abs" "signum" "exp" "log" "sqrt" "fact" "sin" "cos" "tan" "asin" "acos" "atan" "sinh" "cosh" "tanh" "min" "max" "ln"]
+	(let [infix-equations ["abs" "signum" "exp" "log" "sqrt" "fact" "sin" "cos" "tan" "asin" "acos" "atan" "sinh" "cosh" "tanh" "min" "max" "ln" "floor"]
 		  names-no-quotes (map #(if (str/ends-with? % "'") (remove-quote %) %) names)
 		  terms (apply conj infix-equations names-no-quotes)
 		  repeats (take (count terms) (iterate inc 1))
@@ -82,7 +82,7 @@
 					s)))))			
 
 (defn revert-substitute [strings names]
-	(let [infix-equations ["abs" "signum" "exp" "log" "sqrt" "fact" "sin" "cos" "tan" "asin" "acos" "atan" "sinh" "cosh" "tanh" "min" "max" "ln"]
+	(let [infix-equations ["abs" "signum" "exp" "log" "sqrt" "fact" "sin" "cos" "tan" "asin" "acos" "atan" "sinh" "cosh" "tanh" "min" "max" "ln" "floor"]
 		  names-no-quotes (map #(if (str/ends-with? % "'") (remove-quote %) %) names)
 		  terms (apply conj infix-equations names-no-quotes)
 		  repeats (take (count terms) (iterate inc 1))

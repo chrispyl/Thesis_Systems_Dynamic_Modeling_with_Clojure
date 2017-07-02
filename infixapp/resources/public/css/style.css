@@ -9,11 +9,28 @@
 }
 
 #myChart {
-	display: block;
-    margin-left: auto;
+	display: inline;
+	margin-left: auto;
     margin-right: auto;
 	max-width: 600px;
 	max-height: 400px;
+}
+
+#teamText {
+	visibility: hidden;
+}
+
+#teamTextHidden {
+	visibility: hidden;
+}
+
+#resultsDiv {
+	width: 100%;
+	text-align: center;
+}
+
+#anotherDiv {
+	display: inline-block;
 }
 
 #outerDiv {

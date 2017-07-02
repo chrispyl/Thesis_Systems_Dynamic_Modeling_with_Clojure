@@ -132,7 +132,7 @@ function processInput(){
 }
 			
 function drawChart(){
-	var key = objkeys[currentIter];	
+	var key = objkeys[currentIter];
 	var ctx = document.getElementById("myChart").getContext("2d");
 	chart && chart.destroy(); //to delete the previous instance, to prevent from changing graphs while hovering
 	chart = new Chart(ctx, {
@@ -145,7 +145,7 @@ function drawChart(){
 				cubicInterpolationMode: "monotone",
 				borderColor: "rgba(151,187,205,1)",
 				backgroundColor: "rgba(151,187,205,1)",
-				data:  resp[key]
+				data:  resp['results'][key]
 			}]
 		},
 		options: {
@@ -198,6 +198,32 @@ function constructJSON(strs, start, end, step, jsonObjFromFiles) {
 	return JSON.stringify(mergedJSONs);
 }
 
+function printTeams(teamsObj){
+	var independentTeams = teamsObj['independent'];
+	var dependentTeams = teamsObj['dependent'];
+	
+	var independenLength = independentTeams.length;
+	var dependenLength = dependentTeams.length;
+	
+	var str = 'Independent teams:\n';
+	
+	for(i = 0; i < independenLength; i++)
+	{
+		str = str.concat('{' + independentTeams[i] + '}\n');
+	}
+	
+	str = str.concat('\n');
+	str = str.concat('Dependent team:\n');
+	
+	for(i = 0; i < dependenLength; i++)
+	{
+		str = str.concat('{' + dependentTeams[i] + '}\n');
+	}
+	
+	document.getElementById('teamText').value = str;
+	document.getElementById('teamText').style.visibility = "visible";
+}
+
 function postJSONMessage (msg) {
 	var initialTextareaVal = document.getElementById('textArea').value;
 	var request = new XMLHttpRequest();
@@ -207,7 +233,8 @@ function postJSONMessage (msg) {
 		if (request.readyState === 4 && request.status === 200) {
 			document.getElementById('textArea').value = initialTextareaVal;
 			resp=JSON.parse(request.responseText);
-			for(var k in resp) objkeys.push(k);
+			for(var k in resp['results']) objkeys.push(k);
+			printTeams(resp['all-teams']);
 			showNavigationButtons();
 			drawChart();
 		} else {
