@@ -29,15 +29,15 @@
 	text-align: center;
 }
 
-#anotherDiv {
+#resultsInnerDiv {
 	display: inline-block;
 }
 
-#outerDiv {
+#buttonHolder {
 	width: 100%;
 	text-align: center;
 }
 
-#buttonHolder {
+#buttonInnerHolder {
 	display: inline-block;
 }

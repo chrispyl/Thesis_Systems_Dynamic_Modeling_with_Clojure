@@ -4,7 +4,6 @@ var objkeys;
 var iterations;
 var chart=null;
 
-
 function hideNavigationButtons(){
 	document.getElementById('previousButton').style.visibility = 'hidden';
 	document.getElementById('nextButton').style.visibility = 'hidden';
@@ -202,6 +201,9 @@ function printTeams(teamsObj){
 	var independentTeams = teamsObj['independent'];
 	var dependentTeams = teamsObj['dependent'];
 	
+	console.log("independentTeams: " + independentTeams);
+	console.log("dependentTeams: " + dependentTeams);
+	
 	var independenLength = independentTeams.length;
 	var dependenLength = dependentTeams.length;
 	
@@ -220,6 +222,8 @@ function printTeams(teamsObj){
 		str = str.concat('{' + dependentTeams[i] + '}\n');
 	}
 	
+	console.log("String to be put inside the textarea: " + str);
+	
 	document.getElementById('teamText').value = str;
 	document.getElementById('teamText').style.visibility = "visible";
 }
@@ -233,6 +237,7 @@ function postJSONMessage (msg) {
 		if (request.readyState === 4 && request.status === 200) {
 			document.getElementById('textArea').value = initialTextareaVal;
 			resp=JSON.parse(request.responseText);
+			console.log("response: " + request.responseText);
 			for(var k in resp['results']) objkeys.push(k);
 			printTeams(resp['all-teams']);
 			showNavigationButtons();
@@ -241,6 +246,7 @@ function postJSONMessage (msg) {
 			document.getElementById('textArea').value = "Calculating, please wait...";
 		}
 	};
+	console.log("msg to be posted: " + msg);
 	request.send(msg);
 }
 
