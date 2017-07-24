@@ -137,7 +137,17 @@
 (defn care-of-division [strings]
 	(for [s strings]
 		(str/replace s #"\/0\." "/ 0.")))	
-	
+
+(defn strings-to-function-map-parallel [equations]
+	(let [cores (.availableProcessors (Runtime/getRuntime))
+		  groups (if (>= (quot (count equations) cores) 1)
+									(partition-all cores equations)
+									(partition-all (count equations) equations))
+		  gos	(doall 
+				  (map #(async/go (apply merge (map create-function-map %))) groups))
+		  diff-eqs-map	(apply merge (map #(async/<!! %) gos))]
+		  diff-eqs-map))		
+		
 ;input is a vector or sequence		  
 (defn create-system-map [strings fileValues]
 	(let [removed-empty-strings (remove-empty-strings strings)
@@ -148,7 +158,7 @@
 		  group-result (group-by #(str/includes? % "#") care-division)
 		  diff-eqs (group-result true)
 		  eqs (group-result false)
-		  diff-eqs-map (apply merge (map create-function-map diff-eqs))
-		  eqs-map-no-init-values (apply merge (map create-function-map eqs))
+		  diff-eqs-map (strings-to-function-map-parallel diff-eqs)
+		  eqs-map-no-init-values (strings-to-function-map-parallel eqs)
 		  eqs-map (calc-init-vals eqs-map-no-init-values diff-eqs-map fileValues)]
 		(merge diff-eqs-map eqs-map)))		
