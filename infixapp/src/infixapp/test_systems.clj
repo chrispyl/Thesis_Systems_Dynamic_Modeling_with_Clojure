@@ -26,6 +26,23 @@
 	 "c=ix+y-b"
 	 "b=-0.3"])
 
+(def test-substitutions
+	["ix' = min(1, -ix) ** (-ix) * ix - 0.02 * min(ix , -min(-ix , -ix) ) * ix * y#10"
+	 "y' = ( -ix*ix)*0.02 * max(ix, -1) * ix * y - sin(0) * 0.4 * y# 10"
+	 "amaximi'= mina*2+amaximi#0"
+	 "subu' = amaximi+mina*2#0"
+	 "lufu' = amina*2+amaximi#0"
+	 "maxi' = maxi#0"
+	 "amaksi' = maxa#0"
+	 "i=0.5"
+	 "a=4"
+	 "amina=0.2"
+	 "maxa=0.4"
+	 "aw=max(1,1)"
+	 "c=ix+y-b"
+	 "b=-0.3"
+	 "mina=4"])	 
+	 
 (def math-forspace
 	["P1' = (N/(M1+N)) * (PMAX1/K1) * ln((HSC1+IIN)/(HSC1+IOUT1)) - L1*P1 - A11*AL1*P1*H1#1"
 	 "P2' = (N/(M2+N)) * (PMAX2/K2) * ln((HSC2+IOUT1)/(HSC2+IOUT2)) - L2*P2 - A12*AL2*P2*H1 - A22*AL2*P2*H2#1"

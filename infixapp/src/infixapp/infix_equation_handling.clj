@@ -66,50 +66,45 @@
 (defn remove-spaces [strings]
 	(for [s strings]
 		(let [s (str/replace s #"\s" "")]
-			s)))	 			
-
-(defn substitute [strings names]
+			s)))	 						
+			
+(defn substitute [eqs names constants-map]
 	(let [infix-equations ["abs" "signum" "exp" "log" "sqrt" "fact" "sin" "cos" "tan" "asin" "acos" "atan" "sinh" "cosh" "tanh" "min" "max" "ln" "floor"]
 		  names-no-quotes (map #(if (str/ends-with? % "'") (remove-quote %) %) names)
 		  terms (apply conj infix-equations names-no-quotes)
 		  repeats (take (count terms) (iterate inc 1))
 		  substitutes (map #(apply str (repeat % "@")) repeats)
-		  substitute-map (zipmap substitutes terms)]
-		  (for [string strings]
-			(loop [s string substs substitutes]
-				(if (not (empty? substs))
-					(recur (str/replace s (re-pattern (str "\\b" (substitute-map (first substs)) "\\b")) (first substs)) (rest substs))
-					s)))))			
-
-(defn revert-substitute [strings names]
-	(let [infix-equations ["abs" "signum" "exp" "log" "sqrt" "fact" "sin" "cos" "tan" "asin" "acos" "atan" "sinh" "cosh" "tanh" "min" "max" "ln" "floor"]
-		  names-no-quotes (map #(if (str/ends-with? % "'") (remove-quote %) %) names)
-		  terms (apply conj infix-equations names-no-quotes)
-		  repeats (take (count terms) (iterate inc 1))
-		  substitutes (map #(apply str (repeat % "@")) repeats)
-		  substitute-map (zipmap terms substitutes)]
-		  (for [string strings]
-			(loop [s string eq (reverse terms)] ;we reverse because we want to start matching fomr the many, else we would match smaller series of "@" inside bigger ones
-				(if (not (empty? eq))
-					(recur (str/replace s (substitute-map (first eq)) (first eq)) (rest eq))
-					s)))))		  
+		  substitute-map (zipmap substitutes terms)
+		  substituted-with-ats (for [string eqs] ;substituted-with-ats is strings not map
+								(loop [s string substs substitutes]
+									(if (not (empty? substs))
+										(recur (str/replace s (re-pattern (str "\\b" (substitute-map (first substs)) "\\b")) (first substs)) (rest substs))
+										s)))
+		  inverted-substitute-map (clojure.set/map-invert substitute-map) 
+		  keys-whose-value-must-change (map #(inverted-substitute-map %) (keys constants-map)) ;the result is a list of @@@@  @@@@@@@@@@@ @@   
+		  altered-substitute-map  (loop [k keys-whose-value-must-change updated-map substitute-map]
+									(if (empty? k)
+										updated-map
+										(do
+											(recur (rest k) (assoc updated-map (first k) (constants-map (substitute-map (first k))))))))
+		 
+		  substitution-complete (for [string substituted-with-ats]
+								(loop [s string eq (reverse substitutes)] ;we reverse because we want to start matching from the many, else we would match smaller series of "@" inside bigger ones
+									(if (not (empty? eq))
+										(recur (str/replace s (first eq) (altered-substitute-map (first eq))) (rest eq))
+										s)))]
+		  substitution-complete))				  
 		  
 (defn replace-constants [strings]
 	(let [group-result (group-by is-constant? strings)
+		  eqs (group-result false)
 		  constants (group-result true)
-		  equations (group-result false)
-		  eq-names (map #(first (str/split % #"=")) equations)
-		  substituted-eqs (substitute equations eq-names)
-		  constant-names (for [c constants] (first (str/split c #"=")))
+		  names (map #(first (str/split % #"=")) strings)
 		  constant-values-strs (for [c constants] (format-if-neg c))
+		  constant-names (map #(first (str/split % #"=")) constants)
 		  m (zipmap constant-names constant-values-strs)
-		  constants-replaced (for [string substituted-eqs]
-								(loop [s string names constant-names]
-									(if (not (empty? names)) ;if we use next, in the first iteration if there are no constants the replace will hit excetion because it cant take () as argument
-										(recur (str/replace s (first names) (m (first names))) (rest names))
-										s)))
-		 reverted (revert-substitute constants-replaced eq-names)]
-		 reverted))
+		  substituted (substitute eqs names m)]
+		 substituted))
 
 (defn care-of-neg-signs [strings]
 	(for [s strings]
