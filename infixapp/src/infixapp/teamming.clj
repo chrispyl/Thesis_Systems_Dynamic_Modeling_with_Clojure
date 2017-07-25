@@ -183,7 +183,7 @@
 		  independent-teams (find-independent-teams teams in-map)
 		  dependent-teams (find-dependent-teams independent-teams teams)
 		  [independent-teams dependent-teams] (expand-indie-teams (map #(drop 1 %) independent-teams) (map #(drop 1 %) dependent-teams) in-map out-map)]
-		  (zipmap [:independent :dependent] [independent-teams dependent-teams]))) 
+		  (zipmap [:independent :dependent] [independent-teams (flatten dependent-teams)]))) ;all the dependent teams are going into the same team, so 'flatten' groups them into the same list
 
 ;part is (:a :b :c) and shows a team
 ;output {:a {:params [...] :func ...} :b {:params [...] :func ...}}
@@ -214,7 +214,7 @@
 		  partitioned-independent-teams (work-sharing (:independent teams) cores-for-independent)
 		  independent-subsystems (for [subsystem partitioned-independent-teams]
 						(create-subsystem (flatten subsystem) system-map))
-		  dependent-subsystem (create-subsystem (flatten (:dependent teams)) system-map)] ;all the dependent teams are going into the same subsystem, so 'flatten' groups them into the same list
+		  dependent-subsystem (create-subsystem (:dependent teams) system-map)] 
 	(zipmap [:independent :dependent] [independent-subsystems dependent-subsystem])))
 
 		  

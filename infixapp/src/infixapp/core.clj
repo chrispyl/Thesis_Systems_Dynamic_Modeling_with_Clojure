@@ -30,7 +30,11 @@
 		 (criterium.core/bench (serial-integration start end step system-map fileValues))
 		 (criterium.core/bench (partition-labour start end step subsystems-map system-map fileValues))
 		 nil))	
-	
+
+;the dependent team is like e.g (:i :h), but we want it to be like e.g ((:i :k)) in order to be grouped together when shown on the web app		 
+(defn prepare-dependent-team-for-visualization [team-map]
+	(assoc team-map :dependent (list (team-map :dependent))))		 
+		 
 (defn process [start end step strings fileValues]
 	(let [system-map (create-system-map strings fileValues)
 		  team-map (create-team-map system-map fileValues)
@@ -40,7 +44,7 @@
 					(and (empty? (:dependent subsystems-map)) (= (count (:independent subsystems-map)) 1)) (serial-integration start end step system-map fileValues)
 					:else (partition-labour start end step subsystems-map system-map fileValues))
 		 result-map (create-result-map (keys result) (vals result))]
-		(hash-map :results result-map :all-teams team-map)
+		(hash-map :results result-map :all-teams (prepare-dependent-team-for-visualization team-map))
 		))	
 	
 (defn process-req [req]
