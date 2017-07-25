@@ -80,15 +80,13 @@
 									(if (not (empty? substs))
 										(recur (str/replace s (re-pattern (str "\\b" (substitute-map (first substs)) "\\b")) (first substs)) (rest substs))
 										s)))
-		  inverted-substitute-map (clojure.set/map-invert substitute-map) 
+		  inverted-substitute-map (clojure.set/map-invert substitute-map) ;substitute map has keys @@@@@@@ and values the names. We need to invert in order to extract right after the keys who refer to constants
 		  keys-whose-value-must-change (map #(inverted-substitute-map %) (keys constants-map)) ;the result is a list of @@@@  @@@@@@@@@@@ @@   
-		  altered-substitute-map  (loop [k keys-whose-value-must-change updated-map substitute-map]
+		  altered-substitute-map  (loop [k keys-whose-value-must-change updated-map substitute-map] ;the altered-substitute-map is same as the substitute-map but wherever there are constant names has their respective values
 									(if (empty? k)
 										updated-map
-										(do
-											(recur (rest k) (assoc updated-map (first k) (constants-map (substitute-map (first k))))))))
-		 
-		  substitution-complete (for [string substituted-with-ats]
+										(recur (rest k) (assoc updated-map (first k) (constants-map (substitute-map (first k)))))))		 
+		  substitution-complete (for [string substituted-with-ats] ;the strings are reverted to their initial form but with the constants replaced
 								(loop [s string eq (reverse substitutes)] ;we reverse because we want to start matching from the many, else we would match smaller series of "@" inside bigger ones
 									(if (not (empty? eq))
 										(recur (str/replace s (first eq) (altered-substitute-map (first eq))) (rest eq))
@@ -127,7 +125,7 @@
 			(apply dissoc m (keys diff-eqs-map)))))
 					
 (defn remove-empty-strings [strings]
-	(filter #(not (empty? %)) strings))
+	(filter #(not (str/blank? %)) strings))
 
 (defn care-of-division [strings]
 	(for [s strings]
@@ -146,7 +144,7 @@
 ;input is a vector or sequence		  
 (defn create-system-map [strings fileValues]
 	(let [removed-empty-strings (remove-empty-strings strings)
-		  no-spaces (remove-spaces removed-empty-strings)
+		  no-spaces (doall (remove-spaces removed-empty-strings))
 		  constants-replaced (replace-constants no-spaces) ;does not include constants
 		  care-negs-replaced (care-of-neg-signs constants-replaced)
 		  care-division (care-of-division care-negs-replaced)
