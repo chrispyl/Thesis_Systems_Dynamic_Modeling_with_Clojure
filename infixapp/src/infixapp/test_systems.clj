@@ -29,9 +29,9 @@
 (def test-substitutions
 	["ix' = min(1, -ix) ** (-ix) * ix - 0.02 * min(ix , -min(-ix , -ix) ) * ix * y#10"
 	 "y' = ( -ix*ix)*0.02 * max(ix, -1) * ix * y - sin(0) * 0.4 * y# 10"
-	 "amaximi'= mina*2+amaximi#0"
+	 "amaximi'= mina+mina*2+amaximi#0"
 	 "subu' = amaximi+mina*2#0"
-	 "lufu' = amina*2+amaximi#0"
+	 "lufu' = amina*2+amaximi+amina#0"
 	 "maxi' = maxi#0"
 	 "amaksi' = maxa#0"
 	 "i=0.5"

@@ -46,14 +46,15 @@
 (defn create-reachability-map [nodes graph]
 	(map #(hash-map % (dfs % graph)) nodes))																							
 
+;outputs the functions based on reachabilities only
 ;output in the form ((:a :b :c #{:c :v})(:x :y #{:a :b})...) where sets are the reachablilities
 ;reachabilities - map eg ({:x #{:c :v}}...{}{}{})
 (defn find-teams [reachabilities]
-	(let [sets (map #(first (vals %)) reachabilities)
-		  no-duplicates (set sets) ;first to take the one and only value out of the list vals give
+	(let [sets (map #(first (vals %)) reachabilities) ;first to take the one and only value out of the list vals give
+		  no-duplicates (set sets) 
 		  before-merging (map 
 							(fn [the-set](filter #(= the-set (first (vals %))) reachabilities))
-								no-duplicates)]
+								no-duplicates)] ;creates a list of lists with each list having the same reachabilities
 		  (for [team before-merging]
 			(conj
 				(for [m team]
@@ -86,11 +87,15 @@
 				(into () (disj team node))
 				(into () team)))))			
 
-;returns the independent teams without the removed team
+;returns the dependent teams without the removed team
 ;dependent-team - list 				
-;dependent-teams - list of lists 
-(defn remove-dep-team-from-dep-teams [dependent-team dependent-teams]
-	(into () (disj (set dependent-teams) dependent-team)))
+;dependent-teams - list of lists
+(defn remove-dep-team-from-dep-teams [dependent-team dependent-teams] ;to ena einai (:aw :c) kai to allo (:c :aw) gia auto den ginetai to disjoint
+	(let [dependent-team-as-set (set dependent-team) ;convert to set to help the disj. If not the disj could try to e.g (disj #{(:aw :c)} (:c :aw)) which wouldn't work because the elements in the lists are not in the correct order 
+		 dependent-teams-as-sets (map set dependent-teams)
+		 dep-team-removed (disj (set dependent-teams-as-sets) dependent-team-as-set)
+		 dep-team-removed-back-into-lists (map #(into () %) dep-team-removed)] ;revert the contained teams back to lists, which were sets before
+		dep-team-removed-back-into-lists))
 
 ;returns boolean
 ;checks if a node depends from nodes outside of the independent team examined
@@ -142,7 +147,7 @@
 
 								
 ;returns a vector where the first element is the expanded indie teams and the second the updated dependent teams
-;;in-map - map	eg. {:x #{:y :x}, :y #{:y :x}, :a #{:b :a}, :b #{:b :a}, :k #{:m :k}, :m #{:m :k}, :z #{:o :b}, :w #{:m :z}, :o #{:y :w}}
+;in-map - map	eg. {:x #{:y :x}, :y #{:y :x}, :a #{:b :a}, :b #{:b :a}, :k #{:m :k}, :m #{:m :k}, :z #{:o :b}, :w #{:m :z}, :o #{:y :w}}
 ;out-map - map	eg. {:x #{:y :x}, :y #{:y :x}, :a #{:b :a}, :b #{:b :a}, :k #{:m :k}, :m #{:m :k}, :z #{:o :b}, :w #{:m :z}, :o #{:y :w}}
 ;independent-teams - list of lists eg ((:k :m) (:a :b) (:x :y))
 ;dependent-teams - list of lists eg ((:k :m) (:a :b) (:x :y))
@@ -174,7 +179,7 @@
 		  in-map (ingoing system-map)
 		  out-map  (outgoing system-map)
 		  reachabilities (create-reachability-map (keys system-map) out-map) ;reachability-map in the form ({:x #{:c :v}}...{}{}{})
-		  teams (find-teams reachabilities) 
+		  teams (find-teams reachabilities)
 		  independent-teams (find-independent-teams teams in-map)
 		  dependent-teams (find-dependent-teams independent-teams teams)
 		  [independent-teams dependent-teams] (expand-indie-teams (map #(drop 1 %) independent-teams) (map #(drop 1 %) dependent-teams) in-map out-map)]
