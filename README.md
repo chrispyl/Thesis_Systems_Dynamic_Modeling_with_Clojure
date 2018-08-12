@@ -1,4 +1,4 @@
-#### This project contains the methods presented in my thesis: Systems Dynamic Modeling with Clojure, as well as the web application developed. The thesis supervisor was [Ioannis Athanasiadis](http://www.athanasiadis.info/).
+#### This project contains the methods presented in my [thesis](https://github.com/chrispyl/Thesis_Systems_Dynamic_Modeling_with_Clojure/blob/master/Thesis.pdf): Systems Dynamic Modeling with Clojure, as well as the web application developed. The thesis supervisor was [Ioannis Athanasiadis](http://www.athanasiadis.info/).
 
 ##### Parallel methods, serial methods, test systems: 
 
