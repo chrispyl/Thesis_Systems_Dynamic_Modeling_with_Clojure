@@ -1,7 +1,5 @@
 #### This project contains the methods presented in my thesis: Systems Dynamic Modeling with Clojure, as well as the web application developed. The thesis supervisor was [Ioannis Athanasiadis](http://www.athanasiadis.info/).
-<br>
-<br>
- 
+
 ##### Parallel methods, serial methods, test systems: 
 
 * *Parallelism across the method*  
@@ -25,7 +23,6 @@
 * *Test systems*
     * [for parallelism across the method](https://github.com/chrispyl/Thesis_Systems_Dynamic_Modeling_with_Clojure/blob/master/Test%20systems/for_parallelism_across_the_method.clj)
     * [for parallelism across the system](https://github.com/chrispyl/Thesis_Systems_Dynamic_Modeling_with_Clojure/blob/master/Test%20systems/for_parallelism_across_the_system.clj)
-<br>
 
 ##### Web application:
 To run the [web application](/infixapp/), head to the 'infixapp' folder in the command line and type 'lein uberjar'. Two executables will be created inside the 'target' folder.
