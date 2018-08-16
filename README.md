@@ -1,7 +1,7 @@
 #### This project contains the methods presented in my [thesis](https://github.com/chrispyl/Thesis_Systems_Dynamic_Modeling_with_Clojure/blob/master/Thesis.pdf): Systems Dynamic Modeling with Clojure, as well as the web application developed. The thesis supervisor was [Ioannis Athanasiadis](http://www.athanasiadis.info/).
 
 ## In summary
-We examined how Clojure can be used to achieve parallelism across the method and parallelism across the system. For each type of parallelism, several methods were created using different kinds of Clojure references and data structures in order to determine which method provided the fastest execution times.
+It was examined how Clojure can be used to achieve parallelism across the method and parallelism across the system for dynamic system simulation. For each type of parallelism, several methods were created using different kinds of Clojure references and data structures in order to determine which method provided the fastest execution times. In addition, an [application](/infixapp/) was created, where the user could simulate dynamic systems and inspect the results in plots.
 
 ##### Parallel methods, serial methods, test systems: 
 
